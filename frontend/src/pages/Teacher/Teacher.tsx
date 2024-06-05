@@ -4,10 +4,37 @@ import { useMediaQuery } from "react-responsive";
 import SideBar from "../../components/sidebar/SideBar";
 import Header from "../../components/Header";
 import Tabel from "../../components/Tabel";
-
+import { useFormik, FormikHelpers } from "formik";
+import useTeacherStore from "../../store/teacherStore";
 function Teacher() {
   const { isOpen } = sidebarStore();
   const isMobile = useMediaQuery({ maxWidth: 640 });
+
+  const { addTeacher } = useTeacherStore();
+  const formik = useFormik({
+    initialValues: {
+      nama: "",
+      golongan: "",
+      umur: "",
+      jenisKelamin: "",
+    },
+    onSubmit: async (values, { setSubmitting, setErrors }) => {
+      try {
+        // if (isEdit) {
+        //   // Assuming `teacher.id` is available
+        //   // await updateTeacher(teacher.id, values);
+        // } else {
+        await addTeacher(values);
+        // }
+        // onSuccess();
+      } catch (error) {
+        // setErrors({ submit: error.message });
+      } finally {
+        setSubmitting(false);
+      }
+    },
+  });
+
   return (
     <>
       <div className="relative sm:flex">
@@ -37,84 +64,103 @@ function Teacher() {
                 Add Teacher
               </button>
 
-              <dialog id="my_modal_1" className="modal">
-                <div className="modal-box">
-                  <div className="font-bold text-lg">Isi Biodata Berikut</div>
-                  <div className="form-control">
-                <label className="label">
-                  <span className="label-text">Name :</span>
-                </label>
-                <input
-                  type="text"
-                  name="name"
-                  className="input input-bordered input-primary"
-                  required
-                />
-              </div>
-              <div className="form-control">
-                <label className="label">
-                  <span className="label-text">Password :</span>
-                </label>
-                <input
-                  type="password"
-                  name="name"
-                  className="input input-bordered input-primary"
-                  required
-                />
-              </div>
-              <div className="form-control">
-                <label className="label">
-                  <span className="label-text">Golongan :</span>
-                </label>
-                <input
-                  type="text"
-                  name="name"
-                  className="input input-bordered input-primary"
-                  required
-                />
-              </div>
-              <div className="form-control">
-                <label className="label">
-                  <span className="label-text">Umur :</span>
-                </label>
-                <input
-                  type="text"
-                  name="name"
-                  className="input input-bordered input-primary"
-                  required
-                />
-              </div>
-              <div className="form-control">
-                <label className="label">
-                  <span className="label-text">Jenis Kelamin :</span>
-                </label>
-                <input
-                  type="text"
-                  name="name"
-                  className="input input-bordered input-primary"
-                  required
-                />
-              </div>
-              <div className="form-control">
-                <label className="label">
-                  <span className="label-text">Role :</span>
-                </label>
-                <select className="select select-primary w-full">
-  <option disabled selected>Pilih Role ?</option>
-  <option>User</option>
-  <option>Admin</option>
-</select>
-              </div>
-                  <div className="modal-action">
-                    <form method="dialog">
-                      <button className="btn">Close</button>
-                    </form>
+              <form action="" onSubmit={formik.handleSubmit}>
+                <dialog id="my_modal_1" className="modal">
+                  <div className="modal-box">
+                    <div className="font-bold text-lg">Isi Biodata Berikut</div>
+                    <div className="form-control">
+                      <label className="label">
+                        <span className="label-text">Name :</span>
+                      </label>
+                      <input
+                        type="text"
+                        name="nama"
+                        className="input input-bordered input-primary"
+                        onChange={formik.handleChange}
+                        value={formik.values.nama}
+                        required
+                      />
+                    </div>
+                    <div className="form-control">
+                      <label className="label">
+                        <span className="label-text">Password :</span>
+                      </label>
+                      <input
+                        type="password"
+                        name="name"
+                        className="input input-bordered input-primary"
+                        required
+                      />
+                    </div>
+                    <div className="form-control">
+                      <label className="label">
+                        <span className="label-text">Golongan :</span>
+                      </label>
+                      <input
+                        type="text"
+                        name="golongan"
+                        className="input input-bordered input-primary"
+                        onChange={formik.handleChange}
+                        value={formik.values.golongan}
+                        required
+                      />
+                    </div>
+                    <div className="form-control">
+                      <label className="label">
+                        <span className="label-text">Umur :</span>
+                      </label>
+                      <input
+                        type="text"
+                        name="umur"
+                        className="input input-bordered input-primary"
+                        onChange={formik.handleChange}
+                        value={formik.values.umur}
+                        required
+                      />
+                    </div>
+                    <div className="form-control">
+                      <label className="label">
+                        <span className="label-text">Jenis Kelamin :</span>
+                      </label>
+                      <input
+                        type="text"
+                        name="jenisKelamin"
+                        className="input input-bordered input-primary"
+                        onChange={formik.handleChange}
+                        value={formik.values.jenisKelamin}
+                        required
+                      />
+                    </div>
+                    <div className="form-control">
+                      <label className="label">
+                        <span className="label-text">Role :</span>
+                      </label>
+                      <select className="select select-primary w-full">
+                        <option disabled selected>
+                          Pilih Role ?
+                        </option>
+                        <option>User</option>
+                        <option>Admin</option>
+                      </select>
+                    </div>
+                    <button
+                      type="submit"
+                      className="btn btn-primary mt-4"
+                      disabled={formik.isSubmitting}
+                    >
+                      {"Submit"}
+                    </button>
+                    <div className="modal-action">
+                      <form method="dialog">
+                        <button className="btn">Close</button>
+                      </form>
+                    </div>
                   </div>
-                </div>
-              </dialog>
+                </dialog>
+              </form>
             </div>
           </div>
-            <Tabel/>
+          <Tabel />
         </div>
       </div>
     </>
