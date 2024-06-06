@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState,useMemo,useEffect } from "react";
 import sidebarStore from "../../store/sidebar";
 import { useMediaQuery } from "react-responsive";
 import SideBar from "../../components/sidebar/SideBar";
@@ -6,6 +6,7 @@ import Header from "../../components/Header";
 import Tabel from "../../components/Tabel";
 import { useFormik, FormikHelpers } from "formik";
 import useTeacherStore from "../../store/teacherStore";
+import { fetchTeachers } from "./services/TeacherServices";
 function Teacher() {
   const { isOpen } = sidebarStore();
   const isMobile = useMediaQuery({ maxWidth: 640 });
@@ -34,7 +35,25 @@ function Teacher() {
       }
     },
   });
+  const [dataGuru, setDataGuru] = useState([])
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  useEffect(() => {
+    const getTeachers = async () => {
+      try {
+        const data = await fetchTeachers();
+        setDataGuru(data);
+      } catch (err) {
+        setError(err);
+      } finally {
+        setLoading(false);
+      }
+    };
 
+    getTeachers();
+  }, []);
+  console.log(dataGuru);
+  
   return (
     <>
       <div className="relative sm:flex">
