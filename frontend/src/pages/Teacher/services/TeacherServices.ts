@@ -3,11 +3,11 @@
 import axios from "axios";
 
 const API = import.meta.env.VITE_API_URL_TEACHER;
-
+// const API = 'http://localhost:3000'
 console.log(API, "ini API URL");
 
 export const fetchTeachers = async () => {
-  const response = await axios.get(API);
+  const response = await axios.get(API + '/guru' );
   return response.data;
 };
 
