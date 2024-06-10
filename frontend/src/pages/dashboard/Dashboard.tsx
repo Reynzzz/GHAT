@@ -4,8 +4,36 @@ import Header from "../../components/Header";
 import SideBar from "../../components/sidebar/SideBar";
 import Tabel from "../../components/Tabel";
 import useSidebarStore from "../../store/sidebar";
+import useTeacherStore from "../../store/teacherStore";
+import { useCallback, useEffect, useState } from "react";
 
 const Dashboard = () => {
+  const { teachers, fetchTeachers, pageCount } = useTeacherStore();
+  const [currentPage, setCurrentPage] = useState(0);
+  const pageSize = 10;
+
+  const memoizedFetchTeachers = useCallback(
+    (page: number, size: number) => {
+      fetchTeachers(page, size);
+    },
+    [fetchTeachers]
+  );
+
+  useEffect(() => {
+    memoizedFetchTeachers(0, pageSize);
+  }, [memoizedFetchTeachers]);
+  const handlePageClick = (selectedItem: { selected: number }) => {
+    setCurrentPage(selectedItem.selected);
+    memoizedFetchTeachers(selectedItem.selected, pageSize);
+  };
+
+  const dashboardColumns = [
+    { key: "username", label: "Username" },
+    { key: "password", label: "Password" },
+    { key: "Golongan", label: "Golongan" },
+    { key: "umur", label: "Umur" },
+    { key: "jenisKelamin", label: "Jenis Kelamin" },
+  ];
   const { isOpen } = useSidebarStore();
   const isMobile = useMediaQuery({ maxWidth: 640 });
 
@@ -43,7 +71,13 @@ const Dashboard = () => {
         </div>
 
         {/* Table */}
-        <Tabel />
+        <Tabel
+          data={teachers}
+          columns={dashboardColumns}
+          pageCount={pageCount}
+          currentPage={currentPage}
+          onPageChange={handlePageClick}
+        />
       </div>
     </div>
   );

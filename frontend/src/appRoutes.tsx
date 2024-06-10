@@ -10,7 +10,7 @@ const appRoutes = createBrowserRouter([
   { path: "schedelu", element: <Schedelu /> },
   { path: "login", element: <Login /> },
   { path: "settings", element: <Settings /> },
-  { path: "teacher", element: <Teacher /> },
+  { path: "guru", element: <Teacher /> },
   { path: "*", element: <NotFound />, errorElement: <NotFound /> },
 ]);
 

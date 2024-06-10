@@ -54,7 +54,7 @@ const SideBar: React.FC = () => {
             <Icon name="calendar" /> <div className="text-lg">Schedelu</div>
           </NavLink>
           <NavLink
-            to={"/teacher"}
+            to={"/Guru"}
             className={({ isActive }) =>
               `${
                 isActive
@@ -63,7 +63,7 @@ const SideBar: React.FC = () => {
               }`
             }
           >
-            <Icon name="user" /> <div className="text-lg">Teacher</div>
+            <Icon name="user" /> <div className="text-lg">Guru</div>
           </NavLink>
         </div>
 
@@ -81,14 +81,11 @@ const SideBar: React.FC = () => {
             <Icon name="settings" /> <div className="text-lg">Settings</div>
           </NavLink>
 
-            <NavLink
-            to={"/login"}
-            >
-          <button className="btn w-full btn-ghost flex hover:w-full justify-start text-white font-bold hover:bg-green-400 mt-2">
-
-            <Icon name="log-out" /> <div className="text-lg">Logout</div>
-          </button>
-            </NavLink>
+          <NavLink to={"/login"}>
+            <button className="btn w-full btn-ghost flex hover:w-full justify-start text-white font-bold hover:bg-green-400 mt-2">
+              <Icon name="log-out" /> <div className="text-lg">Logout</div>
+            </button>
+          </NavLink>
         </div>
       </div>
     </>

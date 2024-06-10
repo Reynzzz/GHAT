@@ -13,7 +13,8 @@ function Teacher() {
   const { addTeacher } = useTeacherStore();
   const formik = useFormik({
     initialValues: {
-      nama: "",
+      username: "",
+      password: "",
       golongan: "",
       umur: "",
       jenisKelamin: "",
@@ -74,7 +75,7 @@ function Teacher() {
                       </label>
                       <input
                         type="text"
-                        name="nama"
+                        name="username"
                         className="input input-bordered input-primary"
                         onChange={formik.handleChange}
                         value={formik.values.nama}
