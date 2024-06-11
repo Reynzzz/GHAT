@@ -30,3 +30,14 @@ router.post(
 router.get("/absen", ControllerAbsen.getAbsensi);
 router.put("/absen/:id", ControllerAbsen.validasiAbsen);
 module.exports = router;
+router.post("/login", ControllerAbsen.Login);
+// router.use(authentication)
+router.post(
+  "/absen",
+  upload.single("foto_absen"),
+  errorMulter,
+  ControllerAbsen.guruAbsen
+);
+router.get("/absen", ControllerAbsen.getAbsensi);
+router.put("/absen/:id", ControllerAbsen.validasiAbsen);
+module.exports = router;

@@ -24,7 +24,7 @@ List endPoints
 Mendapatkan Semua Guru
 Endpoint: GET /guru
 
-Deskripsi: Mengambil semua data Guru termasuk absensi mereka (guruAbsen).
+Deskripsi: Mengambil semua data Guru termasuk absensi mereka.
 
 Respon:
 
@@ -106,19 +106,25 @@ Contoh Permintaan:
 ```
 POST /guru
 {
-    "name": "John Doe",
-    "Golongan": "A",
-    "umur": 30,
-    "jenisKelamin": "Laki-laki"
+        
+        "username": "test",
+        "Golongan": "v1",
+        "umur": 20,
+        "jenisKelamin": "p",
+        "password": "test12345",
 }
 ```
 ```
 {
-    "id": 2,
-    "name": "John Doe",
-    "Golongan": "A",
-    "umur": 30,
-    "jenisKelamin": "Laki-laki"
+   
+        "id": 7,
+        "username": "test",
+        "Golongan": "v1",
+        "umur": 20,
+        "jenisKelamin": "p",
+        "password": "$2a$10$D1mZ9Ax6Jl4y5i/cqRjPP.IGkE2a.maIEjAR1qO/3MMX7LmeQVn0y",
+        "createdAt": "2024-05-29T13:15:57.000Z",
+        "updatedAt": "2024-05-29T13:15:57.000Z"
 }
 ```
 
