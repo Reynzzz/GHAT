@@ -19,7 +19,7 @@ const Header: React.FC = () => {
     case "/settings":
       headerText = "Settings";
       break;
-    case "/guru":
+    case "/Guru":
       headerText = "Guru";
       break;
     default:

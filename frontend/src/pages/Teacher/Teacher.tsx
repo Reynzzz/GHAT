@@ -1,4 +1,4 @@
-import React, { useState,useMemo,useEffect } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import sidebarStore from "../../store/sidebar";
 import { useMediaQuery } from "react-responsive";
 import SideBar from "../../components/sidebar/SideBar";
@@ -30,13 +30,13 @@ function Teacher() {
         // }
         // onSuccess();
       } catch (error) {
-        // setErrors({ submit: error.message });
+        setErrors({ submit: error.message });
       } finally {
         setSubmitting(false);
       }
     },
   });
-  const [dataGuru, setDataGuru] = useState([])
+  const [dataGuru, setDataGuru] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   useEffect(() => {
@@ -53,8 +53,7 @@ function Teacher() {
 
     getTeachers();
   }, []);
-  console.log(dataGuru);
-  
+
   return (
     <>
       <div className="relative sm:flex">
@@ -97,7 +96,7 @@ function Teacher() {
                         name="username"
                         className="input input-bordered input-primary"
                         onChange={formik.handleChange}
-                        value={formik.values.nama}
+                        value={formik.values.username}
                         required
                       />
                     </div>
@@ -107,7 +106,7 @@ function Teacher() {
                       </label>
                       <input
                         type="password"
-                        name="name"
+                        name="password"
                         className="input input-bordered input-primary"
                         required
                       />
@@ -142,14 +141,13 @@ function Teacher() {
                       <label className="label">
                         <span className="label-text">Jenis Kelamin :</span>
                       </label>
-                      <input
-                        type="text"
-                        name="jenisKelamin"
-                        className="input input-bordered input-primary"
-                        onChange={formik.handleChange}
-                        value={formik.values.jenisKelamin}
-                        required
-                      />
+                      <select className="select select-primary w-full">
+                        <option disabled selected>
+                          Pilih jenis kelamin
+                        </option>
+                        <option>Laki-Laki</option>
+                        <option>Perempuan</option>
+                      </select>
                     </div>
                     <div className="form-control">
                       <label className="label">
@@ -180,7 +178,7 @@ function Teacher() {
               </form>
             </div>
           </div>
-          <Tabel />
+          {/* <Tabel /> */}
         </div>
       </div>
     </>

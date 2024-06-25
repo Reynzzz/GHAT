@@ -5,34 +5,45 @@ import SideBar from "../../components/sidebar/SideBar";
 import Tabel from "../../components/Tabel";
 import useSidebarStore from "../../store/sidebar";
 import useTeacherStore from "../../store/teacherStore";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect } from "react";
 
 const Dashboard = () => {
-  const { teachers, fetchTeachers, pageCount } = useTeacherStore();
-  const [currentPage, setCurrentPage] = useState(0);
-  const pageSize = 10;
-
-  const memoizedFetchTeachers = useCallback(
-    (page: number, size: number) => {
-      fetchTeachers(page, size);
-    },
-    [fetchTeachers]
-  );
+  const { allTeachers, fetchTeachers, pageCount, currentPage, setCurrentPage } =
+    useTeacherStore();
 
   useEffect(() => {
-    memoizedFetchTeachers(0, pageSize);
-  }, [memoizedFetchTeachers]);
-  const handlePageClick = (selectedItem: { selected: number }) => {
-    setCurrentPage(selectedItem.selected);
-    memoizedFetchTeachers(selectedItem.selected, pageSize);
-  };
+    fetchTeachers();
+  }, [fetchTeachers]);
 
-  const dashboardColumns = [
-    { key: "username", label: "Username" },
-    { key: "password", label: "Password" },
-    { key: "Golongan", label: "Golongan" },
-    { key: "umur", label: "Umur" },
-    { key: "jenisKelamin", label: "Jenis Kelamin" },
+  const handlePageChange = (selected) => {
+    setCurrentPage(selected.selected);
+  };
+  const columns = [
+    {
+      accessorKey: "username",
+      header: "Username",
+      cell: (info) => info.getValue(),
+    },
+    {
+      accessorKey: "Golongan",
+      header: "Golongan",
+      cell: (info) => info.getValue(),
+    },
+    {
+      accessorKey: "umur",
+      header: "Umur",
+      cell: (info) => info.getValue(),
+    },
+    {
+      accessorKey: "jenisKelamin",
+      header: "Jenis Kelamin",
+      cell: (info) => info.getValue(),
+    },
+    {
+      accessorKey: "password",
+      header: "Password",
+      cell: (info) => info.getValue(),
+    },
   ];
   const { isOpen } = useSidebarStore();
   const isMobile = useMediaQuery({ maxWidth: 640 });
@@ -72,11 +83,10 @@ const Dashboard = () => {
 
         {/* Table */}
         <Tabel
-          data={teachers}
-          columns={dashboardColumns}
-          pageCount={pageCount}
+          data={allTeachers}
+          columns={columns}
           currentPage={currentPage}
-          onPageChange={handlePageClick}
+          showActions={false}
         />
       </div>
     </div>
