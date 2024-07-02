@@ -18,7 +18,10 @@ module.exports = (sequelize, DataTypes) => {
   Absensi.init({
     tanggalAbsen: DataTypes.DATE,
     foto_absen: DataTypes.STRING,
-    status: DataTypes.STRING,
+    statusAbsen : DataTypes.BOOLEAN,
+    statusJaga : DataTypes.BOOLEAN,
+    statusKelas : DataTypes.BOOLEAN,
+    jadwalKelas : DataTypes.DATE,
     guruId: DataTypes.INTEGER,
     kelasId: DataTypes.INTEGER,
   }, {

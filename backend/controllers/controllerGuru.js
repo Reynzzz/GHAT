@@ -18,13 +18,14 @@ class Controller {
     } 
     static async postGuru(req,res) {
         try {
-            const { username, Golongan, umur, jenisKelamin, password } = req.body;
+            const { username, Golongan, umur, jenisKelamin, password,role } = req.body;
     const newGuru = await Guru.create({
       username,
       Golongan,
       umur,
       jenisKelamin,
-      password
+      password,
+      role
     });
     // console.log(newGuru);
     res.status(201).json(newGuru);

@@ -15,9 +15,20 @@ module.exports = {
       foto_absen: {
         type: Sequelize.STRING
       },
-      
-    status: {
-        type: Sequelize.STRING
+      statusAbsen : {
+        type : Sequelize.BOOLEAN,
+        defaultValue : false
+      },
+    statusJaga: {
+        type: Sequelize.BOOLEAN,
+        defaultValue: false
+      },
+      statusKelas: {
+        type: Sequelize.BOOLEAN,
+        defaultValue : false
+      },
+      jadwalKelas : {
+         type : Sequelize.DATE
       },
       guruId : {
         type: Sequelize.INTEGER,
