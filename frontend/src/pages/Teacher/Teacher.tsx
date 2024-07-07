@@ -4,41 +4,65 @@ import { useMediaQuery } from "react-responsive";
 import SideBar from "../../components/sidebar/SideBar";
 import Header from "../../components/Header";
 import Tabel from "../../components/Tabel";
-import { useFormik, FormikHelpers } from "formik";
+import { Formik, Form } from "formik";
 import useTeacherStore from "../../store/teacherStore";
-import { fetchTeachers } from "./services/TeacherServices";
+import InputField from "../../components/Inputs/InputField";
+import { Icon } from "@ailibs/feather-react-ts";
+import InputSelect from "../../components/Inputs/InputSelect";
 function Teacher() {
   const { isOpen } = sidebarStore();
   const isMobile = useMediaQuery({ maxWidth: 640 });
 
-  const { addTeacher } = useTeacherStore();
-  const formik = useFormik({
-    initialValues: {
-      username: "",
-      password: "",
-      golongan: "",
-      umur: "",
-      jenisKelamin: "",
-    },
-    onSubmit: async (values, { setSubmitting, setErrors }) => {
-      try {
-        // if (isEdit) {
-        //   // Assuming `teacher.id` is available
-        //   // await updateTeacher(teacher.id, values);
-        // } else {
-        await addTeacher(values);
-        // }
-        // onSuccess();
-      } catch (error) {
-        setErrors({ submit: error.message });
-      } finally {
-        setSubmitting(false);
-      }
-    },
-  });
+  const {
+    addTeacher,
+    allTeachers,
+    fetchTeachers,
+    pageCount,
+    currentPage,
+    setCurrentPage,
+  } = useTeacherStore();
   const [dataGuru, setDataGuru] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [notification, setNotification] = useState(false);
+  const [notifSubmit, setNotifSubmit] = useState(false);
+  const initialValues = {
+    username: "",
+    password: "",
+    Golongan: "",
+    umur: "",
+    jenisKelamin: "",
+    role: "",
+  };
+
+  const columns = [
+    {
+      accessorKey: "username",
+      header: "Username",
+      cell: (info) => info.getValue(),
+    },
+    {
+      accessorKey: "Golongan",
+      header: "Golongan",
+      cell: (info) => info.getValue(),
+    },
+    {
+      accessorKey: "umur",
+      header: "Umur",
+      cell: (info) => info.getValue(),
+    },
+    {
+      accessorKey: "jenisKelamin",
+      header: "Jenis Kelamin",
+      cell: (info) => info.getValue(),
+    },
+    {
+      accessorKey: "password",
+      header: "Password",
+      cell: (info) => info.getValue(),
+    },
+  ];
+
   useEffect(() => {
     const getTeachers = async () => {
       try {
@@ -83,102 +107,124 @@ function Teacher() {
                 Add Teacher
               </button>
 
-              <form action="" onSubmit={formik.handleSubmit}>
-                <dialog id="my_modal_1" className="modal">
-                  <div className="modal-box">
-                    <div className="font-bold text-lg">Isi Biodata Berikut</div>
-                    <div className="form-control">
-                      <label className="label">
-                        <span className="label-text">Name :</span>
-                      </label>
-                      <input
-                        type="text"
-                        name="username"
-                        className="input input-bordered input-primary"
-                        onChange={formik.handleChange}
-                        value={formik.values.username}
-                        required
-                      />
-                    </div>
-                    <div className="form-control">
-                      <label className="label">
-                        <span className="label-text">Password :</span>
-                      </label>
-                      <input
-                        type="password"
-                        name="password"
-                        className="input input-bordered input-primary"
-                        required
-                      />
-                    </div>
-                    <div className="form-control">
-                      <label className="label">
-                        <span className="label-text">Golongan :</span>
-                      </label>
-                      <input
-                        type="text"
-                        name="golongan"
-                        className="input input-bordered input-primary"
-                        onChange={formik.handleChange}
-                        value={formik.values.golongan}
-                        required
-                      />
-                    </div>
-                    <div className="form-control">
-                      <label className="label">
-                        <span className="label-text">Umur :</span>
-                      </label>
-                      <input
-                        type="text"
-                        name="umur"
-                        className="input input-bordered input-primary"
-                        onChange={formik.handleChange}
-                        value={formik.values.umur}
-                        required
-                      />
-                    </div>
-                    <div className="form-control">
-                      <label className="label">
-                        <span className="label-text">Jenis Kelamin :</span>
-                      </label>
-                      <select className="select select-primary w-full">
-                        <option disabled selected>
-                          Pilih jenis kelamin
-                        </option>
-                        <option>Laki-Laki</option>
-                        <option>Perempuan</option>
-                      </select>
-                    </div>
-                    <div className="form-control">
-                      <label className="label">
-                        <span className="label-text">Role :</span>
-                      </label>
-                      <select className="select select-primary w-full">
-                        <option disabled selected>
-                          Pilih Role ?
-                        </option>
-                        <option>User</option>
-                        <option>Admin</option>
-                      </select>
-                    </div>
-                    <button
-                      type="submit"
-                      className="btn btn-primary mt-4"
-                      disabled={formik.isSubmitting}
-                    >
-                      {"Submit"}
-                    </button>
-                    <div className="modal-action">
-                      <form method="dialog">
-                        <button className="btn">Close</button>
-                      </form>
-                    </div>
-                  </div>
-                </dialog>
-              </form>
+              <dialog id="my_modal_1" className="modal w-full">
+                <Formik
+                  initialValues={initialValues}
+                  onSubmit={(values, action) => {
+                    setTimeout(() => {
+                      addTeacher(values);
+                      setNotification(true);
+                      setNotifSubmit(true);
+                      action.setSubmitting(false);
+                      setTimeout(() => {
+                        setNotification(false);
+                        setNotifSubmit(false);
+                        setTimeout(
+                          () =>
+                            (
+                              document.getElementById(
+                                "my_modal_1"
+                              ) as HTMLFormElement
+                            ).close(),
+                          600
+                        );
+                      }, 800);
+                    }, 400);
+                    action.resetForm();
+                  }}
+                >
+                  {({ isSubmitting }) => (
+                    <Form>
+                      <div className="modal-box w-full">
+                        {notification && (
+                          <div className="toast toast-top toast-center">
+                            <div className="alert alert-info">
+                              <span>Tambah Data Berhasil.</span>
+                            </div>
+                          </div>
+                        )}
+                        <form
+                          method="dialog"
+                          className="modal-backdrop flex justify-end"
+                        >
+                          <button className=" w-min ">
+                            {" "}
+                            <Icon name="x" size={32} color="black" />
+                          </button>
+                        </form>
+                        <div className="modal-action flex-col">
+                          <div>
+                            <InputField
+                              label="Username"
+                              name="username"
+                              type="text"
+                              placeholder="masukkan username"
+                              required
+                            />
+                            <InputField
+                              label="Password"
+                              name="password"
+                              type="password"
+                              placeholder="masukkan password"
+                              Required
+                            />
+                            <InputField
+                              label="Umur"
+                              name="umur"
+                              type="number"
+                              placeholder="masukkan umur"
+                              Required
+                            />
+                            <InputField
+                              label="Golongan"
+                              name="Golongan"
+                              type="text"
+                              placeholder="masukkan Golongan"
+                              Required
+                            />
+                            <InputSelect
+                              label="Jenis Kelamin"
+                              name="jenisKelamin"
+                              placeholder="Pilih Jenis Kelamin"
+                            >
+                              <option value="" disabled>
+                                Pilih Jenis Kelamin
+                              </option>
+                              <option value="laki-laki">Laki-Laki</option>
+                              <option value="Perempuan">Perempuan</option>
+                            </InputSelect>
+                            <InputSelect
+                              label="Role"
+                              name="role"
+                              placeholder="Pilih Role"
+                            >
+                              <option value="" disabled>
+                                Pilih Role
+                              </option>
+                              <option value="user">user</option>
+                              <option value="admin">admin</option>
+                            </InputSelect>
+                            <button
+                              disabled={isSubmitting}
+                              type="submit"
+                              className="btn btn-primary w-full"
+                            >
+                              {notifSubmit ? (
+                                <span className="loading loading-spinner loading-md"></span>
+                              ) : (
+                                "Submit"
+                              )}
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </Form>
+                  )}
+                </Formik>
+              </dialog>
             </div>
           </div>
-          {/* <Tabel /> */}
+          <Tabel data={allTeachers} columns={columns} />
         </div>
       </div>
     </>
