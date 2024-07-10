@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import sidebarStore from "../../store/sidebar";
 import { useMediaQuery } from "react-responsive";
 import SideBar from "../../components/sidebar/SideBar";
@@ -9,23 +9,35 @@ import useTeacherStore from "../../store/teacherStore";
 import InputField from "../../components/Inputs/InputField";
 import { Icon } from "@ailibs/feather-react-ts";
 import InputSelect from "../../components/Inputs/InputSelect";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { fetchTeachers } from "./services/TeacherServices";
+
 function Teacher() {
   const { isOpen } = sidebarStore();
   const isMobile = useMediaQuery({ maxWidth: 640 });
 
-  const {
-    addTeacher,
-    allTeachers,
-    fetchTeachers,
-    pageCount,
-    currentPage,
-    setCurrentPage,
-  } = useTeacherStore();
-  const [dataGuru, setDataGuru] = useState([]);
+  // const {
+  //   addTeacher,
+  //   allTeachers,
+  //   fetchTeachers,
+  //   pageCount,
+  //   currentPage,
+  //   setCurrentPage,
+  //   getTeacherById,
+  //   deleteTeacher,
+  // } = useTeacherStore();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [notification, setNotification] = useState(false);
   const [notifSubmit, setNotifSubmit] = useState(false);
+  const [deleteNotification, setDeleteNotification] = useState(false);
+  const queryClient = useQueryClient();
+  const {
+    data: allTeachers,
+    isLoading,
+    isError,
+  } = useQuery({ queryKey: ["teachers"], queryFn: fetchTeachers });
+
   const initialValues = {
     username: "",
     password: "",
@@ -34,7 +46,6 @@ function Teacher() {
     jenisKelamin: "",
     role: "",
   };
-
   const columns = [
     {
       accessorKey: "username",
@@ -46,11 +57,7 @@ function Teacher() {
       header: "Golongan",
       cell: (info) => info.getValue(),
     },
-    {
-      accessorKey: "umur",
-      header: "Umur",
-      cell: (info) => info.getValue(),
-    },
+    { accessorKey: "umur", header: "Umur", cell: (info) => info.getValue() },
     {
       accessorKey: "jenisKelamin",
       header: "Jenis Kelamin",
@@ -62,24 +69,39 @@ function Teacher() {
       cell: (info) => info.getValue(),
     },
   ];
+  console.log(allTeachers?.length, "ini all teachers");
+  // const getTeachers = async () => {
+  //   try {
+  //     await fetchTeachers();
+  //   } catch (err) {
+  //     setError(err);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+  // useMemo(() => {
+  //   getTeachers();
+  // }, [fetchTeachers]);
 
-  useEffect(() => {
-    const getTeachers = async () => {
-      try {
-        const data = await fetchTeachers();
-        setDataGuru(data);
-      } catch (err) {
-        setError(err);
-      } finally {
-        setLoading(false);
-      }
-    };
+  // const onEdit = async (id) => {
+  //   const data = await getTeacherById(id);
+  //   console.log(data, "ini data");
+  // };
 
-    getTeachers();
-  }, []);
+  // const onDelete = async (id) => {
+  //   try {
+  //     await deleteTeacher(id);
+  //     setDeleteNotification(true);
+  //     getTeachers(); // Fetch updated data
+  //     setTimeout(() => setDeleteNotification(false), 2000);
+  //   } catch (err) {
+  //     setError(err);
+  //   }
+  // };
 
   return (
     <>
+      if (isLoading) return (<div>Loading...</div>)
       <div className="relative sm:flex">
         <div
           className={`max-sm:fixed inset-0 max-sm:bg-gray-800 bg-opacity-75 max-sm:z-50 overflow-y-auto transition-transform duration-300 ease-in-out sm:flex ${
@@ -94,7 +116,7 @@ function Teacher() {
         </div>
         <div className="flex-1 min-h-screen px-1">
           <Header />
-          <div className="w-full flex justify-end  px-3">
+          <div className="w-full flex justify-end px-3">
             <div className="">
               <button
                 className="btn bg-green-400"
@@ -147,8 +169,7 @@ function Teacher() {
                           method="dialog"
                           className="modal-backdrop flex justify-end"
                         >
-                          <button className=" w-min ">
-                            {" "}
+                          <button className="w-min">
                             <Icon name="x" size={32} color="black" />
                           </button>
                         </form>
@@ -173,7 +194,7 @@ function Teacher() {
                               name="umur"
                               type="number"
                               placeholder="masukkan umur"
-                              Required
+                              required
                             />
                             <InputField
                               label="Golongan"
@@ -224,7 +245,19 @@ function Teacher() {
               </dialog>
             </div>
           </div>
-          <Tabel data={allTeachers} columns={columns} />
+          {deleteNotification && (
+            <div className="toast toast-top toast-center">
+              <div className="alert alert-info">
+                <span>Data berhasil dihapus.</span>
+              </div>
+            </div>
+          )}
+          <Tabel
+            data={allTeachers}
+            columns={columns}
+            // onEdit={onEdit}
+            // onDelete={onDelete}
+          />
         </div>
       </div>
     </>

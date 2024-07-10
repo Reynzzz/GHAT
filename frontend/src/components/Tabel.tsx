@@ -21,9 +21,8 @@ const Tabel = ({
   const tableData = useMemo(() => data, [data]);
 
   const table = useReactTable({
-    columns: tableColumns,
     data: tableData,
-
+    columns: tableColumns,
     manualPagination: true,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
@@ -55,17 +54,17 @@ const Tabel = ({
           })}
         </thead>
         <tbody>
-          {table.getRowModel().rows.length ? (
-            table.getRowModel().rows?.map((row, i) => (
-              <tr key={row.id}>
+          {table.getRowModel()?.rows?.length ? (
+            table.getRowModel()?.rows?.map((row, i) => (
+              <tr key={row?.id}>
                 <td>{i + 1}</td>
                 {row
-                  .getVisibleCells()
+                  ?.getVisibleCells()
                   ?.map(
                     (cell) => (
                       console.log(cell.column.columnDef.cell, "inicell"),
                       (
-                        <td key={cell.id}>
+                        <td key={cell?.id}>
                           {flexRender(
                             cell.column.columnDef.cell,
                             cell.getContext()
@@ -75,9 +74,21 @@ const Tabel = ({
                     )
                   )}
                 {location.pathname === "/guru" ? (
-                  <td colSpan={columns.length + 1}>
-                    <button className="btn btn-info btn-sm">Edit</button>
-                    <button className="btn btn-error btn-sm">Delete</button>
+                  <td colSpan={columns?.length + 1}>
+                    <button
+                      className="btn btn-info btn-sm"
+                      onClick={() => {
+                        onEdit(row.original.id);
+                      }}
+                    >
+                      Edit
+                    </button>
+                    <button
+                      className="btn btn-error btn-sm"
+                      onClick={() => onDelete(row.original.id)}
+                    >
+                      Delete
+                    </button>
                   </td>
                 ) : null}
               </tr>

@@ -4,6 +4,7 @@ import {
   addTeacher,
   deleteTeacher,
   updateTeacher,
+  getTeacherById,
 } from "../pages/Teacher/services/TeacherServices";
 
 const useTeacherStore = create((set, get) => ({
@@ -38,6 +39,10 @@ const useTeacherStore = create((set, get) => ({
   addTeacher: async (teacher) => {
     await addTeacher(teacher);
     await get().fetchTeachers();
+  },
+  getTeacherById: async (id) => {
+    const teacher = await getTeacherById(id);
+    return teacher;
   },
   updateTeacher: async (id, teacher) => {
     await updateTeacher(id, teacher);

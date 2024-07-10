@@ -17,6 +17,11 @@ export const addTeacher = async (teacher) => {
   return response.data;
 };
 
+export const getTeacherById = async (id: number) => {
+  const response = await axios.get(`${API}/${id}`);
+  return response.data;
+};
+
 export const updateTeacher = async (id: number, teacher) => {
   const response = await axios.put(`${API}/${id}`, teacher);
   return response.data;
