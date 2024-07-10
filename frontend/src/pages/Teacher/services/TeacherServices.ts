@@ -7,12 +7,18 @@ const API = import.meta.env.VITE_API_URL_TEACHER;
 console.log(API, "ini API URL");
 
 export const fetchTeachers = async () => {
-  const response = await axios.get(API + '/guru' );
+  const response = await axios.get(API);
+  console.log(response, "ini response di teacherService");
   return response.data;
 };
 
 export const addTeacher = async (teacher) => {
   const response = await axios.post(API, teacher);
+  return response.data;
+};
+
+export const getTeacherById = async (id: number) => {
+  const response = await axios.get(`${API}/${id}`);
   return response.data;
 };
 

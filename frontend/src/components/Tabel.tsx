@@ -1,72 +1,109 @@
+import React, { useMemo } from "react";
+import {
+  useReactTable,
+  flexRender,
+  getCoreRowModel,
+  getPaginationRowModel,
+} from "@tanstack/react-table";
 import { Icon } from "@ailibs/feather-react-ts";
-import React from "react";
-import ReactPaginate from "react-paginate";
-
-export const Tabel = ({
+import { useLocation } from "react-router-dom";
+const Tabel = ({
   data,
   columns,
-  pageCount,
+  showActions = false,
+  onEdit = null,
+  onDelete = null,
   currentPage,
-  onPageChange,
-  actions,
+  pageCount,
 }) => {
+
   // console.log(data);
   
+
+  const location = useLocation();
+  const tableColumns = useMemo(() => columns, [columns]);
+  const tableData = useMemo(() => data ?? [], [data]);
+
+  const table = useReactTable({
+    data: tableData,
+    columns: tableColumns,
+    manualPagination: true,
+    getCoreRowModel: getCoreRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
+  });
+
   return (
-    <>
-      <div className="text-center pt-16 flex items-center justify-center gap-1">
-        <Icon name="info" size={14} />
-        <h4 className="max-sm:text-xs font-bold">
-          lewat 15 menit dari jam masuk terhitung terlambat
-        </h4>
-      </div>
-
-      <div className="flex justify-between pt-3 p-3">
-        <div className="font-bold max-sm:text-sm text-blue-500">Hari ini</div>
-        <div className="font-bold max-sm:text-sm text-blue-500">
-          Lihat Semua
-        </div>
-      </div>
-
-      <div className="pt-1 px-3 ">
-        <div className="overflow-x-auto   max-sm:h-[80%] ">
-          <table className="max-sm:table max-sm:table-xs  w-full table-pin-rows sm:table-xs table-pin-cols">
-            <thead>
-              <tr>
-                {columns?.map((column) => (
-                  <th key={column.key}>{column.label}</th>
-                ))}
-                {actions && <th>Aksi</th>}
-              </tr>
-            </thead>
-            <tbody>
-              {data?.map((item, index) => (
-                <tr key={index}>
-                  {columns.map((column) => (
-                    <td key={column.key}>{item[column.key]}</td>
-                  ))}
-                  {actions && <td>{actions(item)}</td>}
+    <div className="overflow-x-auto p-2">
+      <table className="table table-xs table-pin-rows table-pin-cols">
+        <thead>
+          {table.getHeaderGroups()?.map((headerEl) => {
+            return (
+              <>
+                <tr key={headerEl.id}>
+                  <th>no</th>
+                  {headerEl.headers?.map((headerCol) => {
+                    return (
+                      <>
+                        <th>
+                          {flexRender(
+                            headerCol.column.columnDef.header,
+                            headerCol.getContext()
+                          )}
+                        </th>
+                      </>
+                    );
+                  })}
                 </tr>
-              ))}
-            </tbody>
-          </table>
-          <ReactPaginate
-            previousLabel={"previous"}
-            nextLabel={"next"}
-            breakLabel={"..."}
-            breakClassName={"break-me"}
-            pageCount={pageCount}
-            marginPagesDisplayed={2}
-            pageRangeDisplayed={5}
-            onPageChange={onPageChange}
-            containerClassName={"pagination"}
-            subContainerClassName={"pages pagination"}
-            activeClassName={"active"}
-            forcePage={currentPage}
-          />
-        </div>
-      </div>
-    </>
+              </>
+            );
+          })}
+        </thead>
+        <tbody>
+          {table.getRowModel()?.rows?.length ? (
+            table.getRowModel()?.rows?.map((row, i) => (
+              <tr key={row?.id}>
+                <td>{i + 1}</td>
+                {row
+                  ?.getVisibleCells()
+                  ?.map(
+                    (cell) => (
+                      console.log(cell.column.columnDef.cell, "inicell"),
+                      (
+                        <td key={cell?.id}>
+                          {flexRender(
+                            cell.column.columnDef.cell,
+                            cell.getContext()
+                          )}
+                        </td>
+                      )
+                    )
+                  )}
+                {location.pathname === "/guru" ? (
+                  <td colSpan={columns?.length + 1}>
+                    <button
+                      className="btn btn-info btn-sm"
+                      onClick={() => {
+                        onEdit(row.original.id);
+                      }}
+                    >
+                      Edit
+                    </button>
+                    <button
+                      className="btn btn-error btn-sm"
+                      onClick={() => onDelete(row.original.id)}
+                    >
+                      Delete
+                    </button>
+                  </td>
+                ) : null}
+              </tr>
+            ))
+          ) : (
+            <div>not available data</div>
+          )}
+        </tbody>
+      </table>
+    </div>
   );
 };
 
