@@ -101,7 +101,6 @@ function Teacher() {
 
   return (
     <>
-      if (isLoading) return (<div>Loading...</div>)
       <div className="relative sm:flex">
         <div
           className={`max-sm:fixed inset-0 max-sm:bg-gray-800 bg-opacity-75 max-sm:z-50 overflow-y-auto transition-transform duration-300 ease-in-out sm:flex ${

@@ -18,7 +18,7 @@ const Tabel = ({
 }) => {
   const location = useLocation();
   const tableColumns = useMemo(() => columns, [columns]);
-  const tableData = useMemo(() => data, [data]);
+  const tableData = useMemo(() => data ?? [], [data]);
 
   const table = useReactTable({
     data: tableData,
