@@ -128,102 +128,6 @@ function Teacher() {
                 Add Teacher
               </button>
 
-<<<<<<< HEAD
-              <form action="" onSubmit={formik.handleSubmit}>
-                <dialog id="my_modal_1" className="modal">
-                  <div className="modal-box">
-                    <div className="font-bold text-lg">Isi Biodata Berikut</div>
-                    <div className="form-control">
-                      <label className="label">
-                        <span className="label-text ">Name :</span>
-                      </label>
-                      <input
-                        type="text"
-                        name="username"
-                        className="input input-bordered input-primary"
-                        onChange={formik.handleChange}
-                        value={formik.values.nama}
-                        required
-                      />
-                    </div>
-                    <div className="form-control">
-                      <label className="label">
-                        <span className="label-text">Password :</span>
-                      </label>
-                      <input
-                        type="password"
-                        name="name"
-                        className="input input-bordered input-primary"
-                        required
-                      />
-                    </div>
-                    <div className="form-control">
-                      <label className="label">
-                        <span className="label-text">Golongan :</span>
-                      </label>
-                      <input
-                        type="text"
-                        name="golongan"
-                        className="input input-bordered input-primary"
-                        onChange={formik.handleChange}
-                        value={formik.values.golongan}
-                        required
-                      />
-                    </div>
-                    <div className="form-control">
-                      <label className="label">
-                        <span className="label-text">Umur :</span>
-                      </label>
-                      <input
-                        type="text"
-                        name="umur"
-                        className="input input-bordered input-primary"
-                        onChange={formik.handleChange}
-                        value={formik.values.umur}
-                        required
-                      />
-                    </div>
-                    <div className="form-control">
-                      <label className="label">
-                        <span className="label-text">Jenis Kelamin :</span>
-                      </label>
-                      <input
-                        type="text"
-                        name="jenisKelamin"
-                        className="input input-bordered input-primary"
-                        onChange={formik.handleChange}
-                        value={formik.values.jenisKelamin}
-                        required
-                      />
-                    </div>
-                    <div className="form-control">
-                      <label className="label">
-                        <span className="label-text">Role :</span>
-                      </label>
-                      <select className="select select-primary w-full">
-                        <option disabled selected>
-                          Pilih Role ?
-                        </option>
-                        <option>User</option>
-                        <option>Admin</option>
-                      </select>
-                    </div>
-                    <button
-                      type="submit"
-                      className="btn btn-primary mt-4"
-                      disabled={formik.isSubmitting}
-                    >
-                      {"Submit"}
-                    </button>
-                    <div className="modal-action">
-                      <form method="dialog">
-                        <button className="btn">Close</button>
-                      </form>
-                    </div>
-                  </div>
-                </dialog>
-              </form>
-=======
               <dialog id="my_modal_1" className="modal w-full">
                 <Formik
                   initialValues={initialValues}
@@ -338,7 +242,7 @@ function Teacher() {
                   )}
                 </Formik>
               </dialog>
->>>>>>> acb3088f2f59d018ffb77a3cd50dfced16f30b8f
+
             </div>
           </div>
           {deleteNotification && (
