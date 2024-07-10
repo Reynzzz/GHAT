@@ -148,7 +148,7 @@ class Controller {
           res.status(500).json({ error: 'Internal Server Error' });
         }
       }
-      static async getAbsensiAdmin(req, res) {
+    static async getAbsensiAdmin(req, res) {
         try {
           const absensis = await Absensi.findAll({
             include: [
