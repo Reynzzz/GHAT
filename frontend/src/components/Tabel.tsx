@@ -10,6 +10,8 @@ export const Tabel = ({
   onPageChange,
   actions,
 }) => {
+  // console.log(data);
+  
   return (
     <>
       <div className="text-center pt-16 flex items-center justify-center gap-1">

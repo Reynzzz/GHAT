@@ -90,7 +90,7 @@ function Teacher() {
                     <div className="font-bold text-lg">Isi Biodata Berikut</div>
                     <div className="form-control">
                       <label className="label">
-                        <span className="label-text">Name :</span>
+                        <span className="label-text ">Name :</span>
                       </label>
                       <input
                         type="text"
