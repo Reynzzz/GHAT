@@ -10,7 +10,7 @@ import InputField from "../../components/Inputs/InputField";
 import { Icon } from "@ailibs/feather-react-ts";
 import InputSelect from "../../components/Inputs/InputSelect";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { fetchTeachers } from "./services/TeacherServices";
+import { fetchTeachers, addTeacher } from "./services/TeacherServices";
 
 function Teacher() {
   const { isOpen } = sidebarStore();
@@ -69,6 +69,7 @@ function Teacher() {
       cell: (info) => info.getValue(),
     },
   ];
+  console.log(isLoading, "loading");
   console.log(allTeachers?.length, "ini all teachers");
   // const getTeachers = async () => {
   //   try {
