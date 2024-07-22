@@ -21,6 +21,7 @@ router.delete("/kelas/:id", ControllerKelas.deletedKelas);
 //controllerAbsen
 router.post("/login", ControllerAbsen.Login);
 router.use(authentication);
+router.get('/scheduleAdmin',ControllerAbsen.getAbsensiAdmin)
 router.post("/absen", ControllerAbsen.guruAbsen);
 router.get("/schedule", ControllerAbsen.getAbsensiSchedule);
 router.put(
@@ -30,7 +31,9 @@ router.put(
   errorMulter,
   ControllerAbsen.updateFotoAbsen
 );
-router.get("/absen", ControllerAbsen.getAbsensi);
+router.get("/absen", ControllerAbsen.getAbsensiNouser);
+router.put('/scheduleAdmin/:id',ControllerAbsen.updateDataAbsens)
+router.delete('/scheduleAdmin/:id',ControllerAbsen.deleteFotoAbsen)
 router.put("/validasiGuruJaga/:id", ControllerAbsen.validasiGuruJaga);
 router.put("/validasiKelas/:id", ControllerAbsen.validasiKelas);
 module.exports = router;

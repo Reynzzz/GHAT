@@ -83,20 +83,17 @@ class Controller {
     }
     static async updateGuru(req,res) {
         try { 
-            const {name,Golongan,umur,jenisKelamin,password} = req.body
+            const {username,Golongan,umur,jenisKelamin,password} = req.body
             const {id} = req.params
-            const data = await Guru.findOne({
-                where : {
-                    id : req.params.id
-                }
-            })
+            console.log(id);
+            const data = await Guru.findByPk(id)
             if (!data) {
                 throw {
                     name : 'Guru not found'
                 }
             }
             await Guru.update({
-                    name,
+                    username,
                     Golongan,
                     umur,
                     jenisKelamin,

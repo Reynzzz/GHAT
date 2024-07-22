@@ -44,18 +44,27 @@ class Controller {
     } catch (error) {
       console.log(error);
       //    next(error)
+      if(error.name === 'invalid login') {
+        res.status(401).json({
+          msg : 'Invalid Login'
+        })
+      } else {
+        res.status(500).json({
+          msg : 'Internal server Error'
+        })
+      }
     }
   }
   static async guruAbsen(req, res) {
     try {
       const { guruId, kelasId, jadwalKelas } = req.body;
-      console.log(req.body, "ni log");
+      // console.log(req.body, "ni log");
       const absensi = await Absensi.create({ guruId, kelasId, jadwalKelas });
       // console.log(absensi);
       res.status(201).json(absensi);
     } catch (error) {
       if (error) {
-        return res.status(400).json({ error: err.message });
+        return res.status(400).json({ error: error.message });
       } else {
         console.error("Error creating absensi:", error);
         res.status(500).json({ error: "Internal Server Error" });
@@ -63,6 +72,33 @@ class Controller {
     }
   }
 
+  static async updateDataAbsens(req, res) {
+    try {
+      const { id } = req.params;
+      const { guruId, kelasId, jadwalKelas } = req.body;
+
+      const absensi = await Absensi.findByPk(id);
+      if (!absensi) {
+        return res.status(404).json({ error: "Absensi not found" });
+      }
+
+      absensi.guruId = guruId || absensi.guruId;
+      absensi.kelasId = kelasId || absensi.kelasId;
+      absensi.jadwalKelas = jadwalKelas || absensi.jadwalKelas;
+
+      await absensi.save();
+  
+      res.status(200).json(absensi);
+    } catch (error) {
+      if (error) {
+        return res.status(400).json({ error: error.message });
+      } else {
+        console.error("Error updating absensi:", error);
+        res.status(500).json({ error: "Internal Server Error" });
+      }
+    }
+  }
+  
   static async updateFotoAbsen(req, res) {
     try {
       const { id } = req.params;
@@ -95,9 +131,37 @@ class Controller {
       }
     }
   }
+  static async deleteFotoAbsen(req, res) {
+    try {
+      const { id } = req.params;
 
+      const absensi = await Absensi.findByPk(id);
+
+      if (!absensi) {
+        return res.status(404).json({ error: "Absensi record not found" });
+      }
+      if (absensi.foto_absen) {
+        const filePath = path.resolve(absensi.foto_absen);
+        fs.unlinkSync(filePath);
+      }
+
+      await absensi.destroy();
+
+      res.status(200).json({ message: "Absensi record deleted successfully" });
+    } catch (error) {
+      console.log(error, "ni error");
+
+      if (error) {
+        return res.status(400).json({ error: error.message });
+      } else {
+        console.error("Error deleting foto_absen:", error);
+        res.status(500).json({ error: "Internal Server Error" });
+      }
+    }
+  }
   static async getAbsensiSchedule(req, res) {
     try {
+      // console.log(req.user);
       const guruId = req.user.id;
       const absensis = await Absensi.findAll({
         where: {
@@ -121,7 +185,7 @@ class Controller {
     }
   }
 
-  static async getAbsensi(req, res) {
+  static async getAbsensiNouser(req, res) {
     try {
       const guruIdToExclude = req.user.id;
       const absensis = await Absensi.findAll({
@@ -201,27 +265,6 @@ class Controller {
       if (!absensi) {
         return res.status(404).json({ error: "Absensi record not found" });
       }
-<<<<<<< HEAD
-    static async getAbsensiAdmin(req, res) {
-        try {
-          const absensis = await Absensi.findAll({
-            include: [
-              {
-                model: Guru,
-                as: 'Guru',
-              },
-              {
-                model: kelas,
-                as: 'Kelas',
-              }
-            ]
-          });
-          res.status(200).json(absensis);
-        } catch (error) {
-          console.error('Error fetching absensi:', error);
-          res.status(500).json({ error: 'Internal Server Error' });
-        }
-=======
       absensi.statusJaga = true;
       await absensi.save();
 
@@ -237,7 +280,6 @@ class Controller {
       } else {
         console.error("Error updating foto_absen:", error);
         res.status(500).json({ error: "Internal Server Error" });
->>>>>>> acb3088f2f59d018ffb77a3cd50dfced16f30b8f
       }
     }
   }

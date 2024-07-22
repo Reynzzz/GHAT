@@ -6,7 +6,7 @@ if (process.env.NODE_ENV !== "production") {
   const app = express();
   const cors = require("cors");
   const router = require('./routers');
-  const port = process.env.PORT || 3000;
+  const port = process.env.PORT || 4000;
   const path = require('path');
   
   app.use(cors());
@@ -15,7 +15,7 @@ if (process.env.NODE_ENV !== "production") {
   app.use(express.static("public"));
   app.use("/", router);
   app.use('/uploads',express.static('uploads'))
-  app.listen(port, () => {
-    console.log(`example listening ${port}`);
+  app.listen(port, '0.0.0.0', () => {
+    console.log(`Server is running on http://0.0.0.0:${port}`);
   });
   
