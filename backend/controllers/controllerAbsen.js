@@ -134,29 +134,26 @@ class Controller {
   static async deleteFotoAbsen(req, res) {
     try {
       const { id } = req.params;
-
       const absensi = await Absensi.findByPk(id);
 
       if (!absensi) {
         return res.status(404).json({ error: "Absensi record not found" });
       }
-      if (absensi.foto_absen) {
-        const filePath = path.resolve(absensi.foto_absen);
-        fs.unlinkSync(filePath);
-      }
 
       await absensi.destroy();
+      if (absensi.foto_absen) {
+        const filePath = path.resolve(absensi.foto_absen);
+        try {
+          fs.unlinkSync(filePath);
+        } catch (fileError) {
+          console.error("Error deleting foto_absen:", fileError);
+        }
+      }
 
       res.status(200).json({ message: "Absensi record deleted successfully" });
     } catch (error) {
-      console.log(error, "ni error");
-
-      if (error) {
-        return res.status(400).json({ error: error.message });
-      } else {
-        console.error("Error deleting foto_absen:", error);
-        res.status(500).json({ error: "Internal Server Error" });
-      }
+      console.error("Error deleting absensi:", error);
+      res.status(500).json({ error: "Internal Server Error" });
     }
   }
   static async getAbsensiSchedule(req, res) {

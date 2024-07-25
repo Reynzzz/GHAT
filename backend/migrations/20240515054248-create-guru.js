@@ -28,6 +28,15 @@ module.exports = {
       role : {
         type : Sequelize.STRING
       },
+      type : {
+        type : Sequelize.STRING
+      },
+      jadwalGuruJagaFrom : {
+        type : Sequelize.DATE
+      },
+      jadwalGuruJagaTo : {
+        type : Sequelize.DATE
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

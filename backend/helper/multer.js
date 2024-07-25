@@ -1,4 +1,3 @@
-// config/multerConfig.js
 const multer = require('multer');
 const path = require('path');
 const sharp = require('sharp');
@@ -42,16 +41,21 @@ const compressImage = async (req, res, next) => {
       .resize({ width: 800 }) 
       .toFile(compressedPath);
 
-
-    fs.unlinkSync(tempPath);
+    // Ensure temp file deletion is logged and handled properly
+    try {
+      fs.unlinkSync(tempPath);
+      console.log(`Deleted temporary file: ${tempPath}`);
+    } catch (unlinkError) {
+      console.error(`Error deleting file: ${unlinkError.message}`);
+    }
 
     req.file.path = compressedPath;
     req.file.filename = `compressed-${filename}`;
 
     next();
   } catch (error) {
-    console.log(error,'ni errorss')
-    // next(error);
+    console.error(`Error during image compression: ${error.message}`);
+    next(error); // Propagate the error to Express error handling middleware
   }
 };
 
