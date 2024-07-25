@@ -1,10 +1,10 @@
-const { Guru } = require('../models');
+const { kelas } = require('../models');
 const { sign, verify } = require('../helper/jwt');
 
-const authentication = async (req, res, next) => {
+const authenticationKEals = async (req, res, next) => {
   try {
 
-    const authHeader = req.headers.authorization;
+    const authHeader = req.headers['authorization'];
     console.log(authHeader);
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
       throw { name: 'invalidTokennn' };
@@ -14,7 +14,7 @@ const authentication = async (req, res, next) => {
     // console.log(access_token);
     const data = verify(access_token);
 
-    const user = await Guru.findByPk(data.id);
+    const user = await kelas.findByPk(data.id);
     if (!user) {
       throw { status: 401, name: 'invalidToken' };
     }
@@ -37,4 +37,4 @@ const authentication = async (req, res, next) => {
   }
 };
 
-module.exports = authentication;
+module.exports = authenticationKEals;

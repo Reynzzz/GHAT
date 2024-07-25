@@ -35,6 +35,7 @@ class Controller {
             id,
             username,
           });
+          console.log(token);
           res.status(201).json({
             access_token: token,
             user,
@@ -191,6 +192,26 @@ class Controller {
             [Op.ne]: guruIdToExclude,
           },
         },
+        include: [
+          {
+            model: Guru,
+            as: "Guru",
+          },
+          {
+            model: kelas,
+            as: "Kelas",
+          },
+        ],
+      });
+      res.status(200).json(absensis);
+    } catch (error) {
+      console.error("Error fetching absensi:", error);
+      res.status(500).json({ error: "Internal Server Error" });
+    }
+  }
+  static async getAbsensiAll(req, res) {
+    try {
+      const absensis = await Absensi.findAll({
         include: [
           {
             model: Guru,
